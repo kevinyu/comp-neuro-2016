@@ -1,1 +1,7 @@
-# comp-neuro-2016
+# VS 265
+
+```
+virtualenv -p python3 env
+source env/bin/activate
+pip install -r requirements.txt
+```
