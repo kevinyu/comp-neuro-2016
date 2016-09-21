@@ -92,7 +92,7 @@ class HyperPlanePlotter(object):
         hyperPlaneTwoPlot = axes[0].plot(hyperPlaneTwo[0,:], hyperPlaneTwo[1,:], 'm-.', 2)[0]
 
         # initialize hidden units plot
-        yData = self.sigmoid(np.dot(weightsOne, self.data) + biasOne)
+        yData = self.sigmoid(np.dot(weightsOne.T, self.data) + biasOne)
         yDataOnePlot = axes[2].plot(yData[0,:halfNumSamples], yData[1,:halfNumSamples], 'b+')[0]
         yDataTwoPlot = axes[2].plot(yData[0,halfNumSamples:], yData[1,halfNumSamples:], 'rx')[0]
 
@@ -134,7 +134,7 @@ class HyperPlanePlotter(object):
         hyperPlaneTwo[1,:] = -(weightsOne[0,1]*hyperPlaneTwo[0,:]+biasOne[1])/weightsOne[1,1]
         hyperPlaneTwoPlot.set_ydata(hyperPlaneTwo[1,:])
 
-        yData = self.sigmoid(np.dot(weightsOne, self.data) + biasOne)
+        yData = self.sigmoid(np.dot(weightsOne.T, self.data) + biasOne)
         yDataOnePlot.set_data(yData[0,:halfNumSamples], yData[1,:halfNumSamples])
         yDataTwoPlot.set_data(yData[0,halfNumSamples:], yData[1,halfNumSamples:])
 
@@ -166,7 +166,7 @@ class FilterPlotter(object):
         filterPlots = [None] * numHiddenUnits
         for i in np.arange(numHiddenUnits):
             axes = plt.subplot(1,numHiddenUnits,i+1)
-            filterPlots[i] = plt.imshow(weightsOne[i,:].reshape(3,3),cmap='Greys',interpolation='none')
+            filterPlots[i] = plt.imshow(weightsOne[:,i].reshape(3,3),cmap='Greys',interpolation='none')
             axes.xaxis.set_visible(False)
             axes.yaxis.set_visible(False)
         plt.tight_layout()
@@ -175,8 +175,8 @@ class FilterPlotter(object):
         self.filterPlots = filterPlots
 
     def updatePlots(self, weightsOne):
-        for i in range(weightsOne.shape[0]):
-            self.filterPlots[i].set_data(weightsOne[i,:].reshape(3,3))
+        for i in range(weightsOne.shape[1]):
+            self.filterPlots[i].set_data(weightsOne[:,i].reshape(3,3))
         self.figure.canvas.draw()
 
     def plotError(self, t, errorT):
